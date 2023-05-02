@@ -2,8 +2,10 @@ from matplotlib.colors import ListedColormap
 from scipy.spatial.distance import pdist, squareform
 from scipy import exp
 from scipy.linalg import eigh
+from scipy.special import comb
 import matplotlib.pyplot as plt
 import numpy as np
+import math
 
 def rbf_kernel_pca(X, gamma, n_components):
     """
@@ -21,9 +23,10 @@ def rbf_kernel_pca(X, gamma, n_components):
 
     Returns
     ---------
-    X_pc: {NumPy ndarray}, shape = [n_examples, k_features]
+    alphas: {NumPy ndarray}, shape = [n_examples, k_features]
         Project dataset
 
+    lambdas: list
     """
     # calculate pairwise squared Euclidean distances
     # in the MxN dimensional dataset
@@ -46,9 +49,12 @@ def rbf_kernel_pca(X, gamma, n_components):
     eigvals, eigvecs = eigvals[::-1], eigvecs[:, ::-1]
 
     # Collect the top k eigenvectors (projected examples)
-    X_pc = np.column_stack([eigvecs[:, i] for i in range(n_components)])
+    alphas = np.column_stack([eigvecs[: ,i] for i in range(n_components)])
 
-    return X_pc
+    # Collect the corresponding eigenvalues
+    lambdas = [eigvals[i] for i in range(n_components)]
+
+    return alphas, lambdas
 
 def plot_decision_regions(X, y, classifier, test_idx=None, resolution=0.02):
 
@@ -77,3 +83,11 @@ def plot_decision_regions(X, y, classifier, test_idx=None, resolution=0.02):
         X_test, y_test = X[test_idx, :], y[test_idx]
 
         plt.scatter(X_test[:, 0], X_test[:, 1], edgecolor='black', alpha=1.0, linewidth=1, marker='o', s=100, label='test set')
+
+
+def emsemble_error(n_classifier, error):
+    k_start = int(math.ceil(n_classifier / 2.))
+    probs = [comb(n_classifier, k) * error**k * (1-error)**(n_classifier - k) for k in range(k_start, n_classifier + 1)]
+    return sum(probs)
+
+print(emsemble_error(n_classifier=11, error=0.25))
