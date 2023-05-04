@@ -12,7 +12,6 @@ from flask import Flask
 from matplotlib.figure import Figure
 from itertools import product
 import numpy as np
-import operator
 import base64
 
 app = Flask(__name__)
