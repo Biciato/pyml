@@ -1,6 +1,7 @@
 mnist_scaled.npz
 ext
-pyml
+py_ml
 __pycache__
 iris-classifier.h5
+models
 
