@@ -5,8 +5,11 @@ Using Python 3.8
 
 libs
 
-- pandas
-- numpy
-- scikit-learn
-- scipy
+- flask
 - matplotlib
+- mxltend
+- numpy
+- pandas
+- scikit-learn
+- tensorflow
+- tensorflow-datasets
